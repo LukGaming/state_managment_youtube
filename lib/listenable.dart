@@ -1,11 +1,11 @@
 typedef VoidCallback = void Function();
 
-abstract class Listenable {
+abstract class MyListenable {
   void addListener(VoidCallback callback);
   void removeListener(VoidCallback callback);
 }
 
-class ChangeNotifier implements Listenable {
+class MyChangeNotifier implements MyListenable {
   final List<VoidCallback> callbacks = [];
 
   @override
