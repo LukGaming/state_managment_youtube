@@ -1,6 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:state_managment_youtube/counter.dart';
 import 'package:state_managment_youtube/listenable_builder.dart';
+import 'package:state_managment_youtube/value_listenable.dart';
 
 void main() {
   runApp(const MyApp());
@@ -30,7 +32,19 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final counterController = Counter();
+  final counter = MyValueNotifier(0);
+
+  final increasableString = MyValueNotifier("A");
+
+  void increaseString(Timer timer) async {
+      increasableString.value += "A";
+  }
+
+  @override
+  void initState() {
+   Timer.periodic(Duration(milliseconds: 200), increaseString);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,26 +59,25 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             const Text('You have pushed the button this many times:'),
             MyListenableBuilder(
-              listenable: counterController,
-
+              listenable: counter,
               builder: (context, child) {
                 return Column(
                   children: [
                     Text(
-                      '${counterController.count}',
+                      '${counter.value}',
                       style: Theme.of(context).textTheme.headlineMedium,
                     ),
-                    child!,
                   ],
                 );
               },
-              child: Text("Teste"),
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: counterController.incrementCounter,
+        onPressed: () {
+          counter.value++;
+        },
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
